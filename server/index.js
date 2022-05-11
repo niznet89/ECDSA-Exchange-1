@@ -78,12 +78,13 @@ app.post('/send', (req, res) => {
     let signature = await secp.sign(messageHash, sender);
     const isValid = secp.verify(signature, messageHash, sendingPrivateKey);
     console.log(isValid);
-
-    const indexOfSender = privateArray.indexOf(sender);
+    if (isValid) {
+      const indexOfSender = privateArray.indexOf(sender);
     console.log(indexOfSender);
     balances[publicArray[indexOfSender]] -= amount;
     balances[recipient] = (balances[recipient] || 0) + +amount;
     res.send({ balance: balances[publicArray[indexOfSender]] });
+    }
   })();
 });
 
